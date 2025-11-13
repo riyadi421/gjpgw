@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Gaji Pegawai - PWA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">💰 GajiPegawai</h1>
+            <div class="nav-menu">
+                <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+                <button class="nav-btn" data-page="insert">Tambah Data</button>
+                <button class="nav-btn" data-page="report">Laporan</button>
+                <button class="nav-btn" data-page="delete">Hapus Data</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <div class="page-header">
+                <h2>Dashboard Gaji Pegawai</h2>
+                <div class="pwa-status" id="pwaStatus">
+                    <span class="status-browser">🌐 Browser</span>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3>Total Pegawai</h3>
+                        <p id="totalPegawai">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3>Total Gaji</h3>
+                        <p id="totalGaji">Rp 0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <h3>Rata-rata Gaji</h3>
+                        <p id="rataGaji">Rp 0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-section">
+                <h3>Data Terbaru</h3>
+                <div id="recentData" class="data-table-container">
+                    <p class="no-data">Memuat data...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insert Data Page -->
+        <div id="insert" class="page">
+            <div class="page-header">
+                <h2>Tambah Data Gaji Pegawai</h2>
+            </div>
+
+            <form id="formGaji" class="form-container">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nama">Nama Pegawai *</label>
+                        <input type="text" id="nama" required placeholder="Masukkan nama lengkap">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nik">NIK *</label>
+                        <input type="text" id="nik" required placeholder="Masukkan NIK">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="golongan">Golongan *</label>
+                        <select id="golongan" required>
+                            <option value="">Pilih Golongan</option>
+                            <option value="IIIA">IIIA - Rp 3.000.000</option>
+                            <option value="IIIB">IIIB - Rp 3.500.000</option>
+                            <option value="IIIC">IIIC - Rp 4.000.000</option>
+                            <option value="IIID">IIID - Rp 4.500.000</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="statusKeluarga">Status Keluarga *</label>
+                        <select id="statusKeluarga" required>
+                            <option value="">Pilih Status</option>
+                            <option value="Nikah">Nikah</option>
+                            <option value="Tidak Menikah">Tidak Menikah</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jumlahAnak">Jumlah Anak</label>
+                        <select id="jumlahAnak">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jabatan">Jabatan *</label>
+                        <select id="jabatan" required>
+                            <option value="">Pilih Jabatan</option>
+                            <option value="Asisten Ahli">Asisten Ahli</option>
+                            <option value="Lektor">Lektor</option>
+                            <option value="Lektor Kepala">Lektor Kepala</option>
+                            <option value="Guru Besar">Guru Besar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="salary-summary">
+                    <h3>Rincian Gaji</h3>
+                    <div class="salary-details">
+                        <div class="salary-item">
+                            <span>Gaji Pokok:</span>
+                            <span id="gajiPokokDisplay">Rp 0</span>
+                        </div>
+                        <div class="salary-item">
+                            <span>Tunjangan Keluarga:</span>
+                            <span id="tunjanganKeluargaDisplay">Rp 0</span>
+                        </div>
+                        <div class="salary-item">
+                            <span>Tunjangan Anak:</span>
+                            <span id="tunjanganAnakDisplay">Rp 0</span>
+                        </div>
+                        <div class="salary-item">
+                            <span>Tunjangan Jabatan:</span>
+                            <span id="tunjanganJabatanDisplay">Rp 0</span>
+                        </div>
+                        <div class="salary-total">
+                            <span>Gaji Bersih:</span>
+                            <span id="gajiBersihDisplay">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        💾 Simpan Data
+                    </button>
+                    <button type="button" id="btnReset" class="btn btn-secondary">
+                        🔄 Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Report Page -->
+        <div id="report" class="page">
+            <div class="page-header">
+                <h2>Laporan Gaji Pegawai</h2>
+                <div class="report-actions">
+                    <button id="btnExport" class="btn btn-primary">📊 Export CSV</button>
+                    <button id="btnPrint" class="btn btn-secondary">🖨️ Cetak</button>
+                </div>
+            </div>
+
+            <div class="data-table-container">
+                <table id="reportTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>NIK</th>
+                            <th>Golongan</th>
+                            <th>Gaji Pokok</th>
+                            <th>Tunj. Keluarga</th>
+                            <th>Tunj. Anak</th>
+                            <th>Tunj. Jabatan</th>
+                            <th>Gaji Bersih</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="9" class="no-data">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Delete Page -->
+        <div id="delete" class="page">
+            <div class="page-header">
+                <h2>Hapus Data Pegawai</h2>
+            </div>
+
+            <div class="search-section">
+                <div class="search-group">
+                    <label>Cari Berdasarkan NIK:</label>
+                    <div class="search-input-group">
+                        <input type="text" id="searchNIK" placeholder="Masukkan NIK">
+                        <button id="btnSearchNIK" class="btn btn-primary">🔍 Cari</button>
+                    </div>
+                </div>
+
+                <div class="search-group">
+                    <label>Cari Berdasarkan Nama:</label>
+                    <div class="search-input-group">
+                        <input type="text" id="searchNama" placeholder="Masukkan nama">
+                        <button id="btnSearchNama" class="btn btn-primary">🔍 Cari</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="searchResults" class="search-results">
+                <p class="info-text">Gunakan form pencarian di atas untuk mencari data</p>
+            </div>
+
+            <div class="all-data-section">
+                <h3>Semua Data Pegawai</h3>
+                <div class="data-table-container">
+                    <table id="allDataTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIK</th>
+                                <th>Golongan</th>
+                                <th>Jabatan</th>
+                                <th>Gaji Bersih</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="no-data">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Konfirmasi Hapus</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">Apakah Anda yakin ingin menghapus data ini?</p>
+            </div>
+            <div class="modal-actions">
+                <button id="confirmDelete" class="btn btn-danger">🗑️ Ya, Hapus</button>
+                <button id="cancelDelete" class="btn btn-secondary">❌ Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <div class="install-content">
+            <span>📱 Install Aplikasi Gaji Pegawai?</span>
+            <div class="install-actions">
+                <button id="installBtn" class="btn btn-primary">Install</button>
+                <button id="cancelInstall" class="btn btn-secondary">Nanti</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
